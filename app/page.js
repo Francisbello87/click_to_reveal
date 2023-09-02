@@ -1,95 +1,98 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+"use client";
+import { MdWork } from "react-icons/md";
+import { FaLinkedin, FaTwitter } from "react-icons/fa";
+import { IoMdClose } from "react-icons/io";
+import { gsap } from "gsap/dist/gsap";
+import { useEffect } from "react";
 
 export default function Home() {
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const drawer = document.querySelector(".drawer");
+      const close = document.querySelector(".close");
+      const cardsContainer = document.querySelector(".cards");
+
+      if (drawer && close && cardsContainer) {
+        const tl = gsap.timeline({
+          paused: true,
+          reversed: true,
+          onStart: function () {
+            cardsContainer.style.pointerEvents = "all";
+          },
+          onReverseComplete: function () {
+            cardsContainer.style.pointerEvents = "none";
+          },
+        });
+        tl.from(".cards .card", {
+          duration: 1.5,
+          y: 1000,
+          stagger: {
+            amount: 0.3,
+          },
+          ease: "power4.inOut",
+        })
+          .from(
+            ".close",
+            {
+              duration: 0.5,
+              scale: 0,
+              delay: 1,
+            },
+            "<"
+          )
+          .from(".footer", { duration: 0.5, opacity: 0 });
+
+        drawer.addEventListener("click", function () {
+          if (tl.reversed()) {
+            tl.play();
+          } else {
+            tl.reverse();
+          }
+        });
+
+        close.addEventListener("click", function () {
+          tl.reverse();
+        });
+      }
+    }
+  }, []);
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <main>
+      <div className="container">
+        <div className="nav">
+          <div className="nav-item">
+            <div className="nav-icon">
+              <MdWork className="icons" />
+            </div>
+            <div className="nav-icon-name">Projects</div>
+            <div className="drawer"></div>
+          </div>
+          <div className="nav-item">
+            <div className="nav-icon">
+              <FaTwitter className="icons" />
+            </div>
+            <div className="nav-icon-name">Twitter</div>
+          </div>
+          <div className="nav-item">
+            <div className="nav-icon">
+              <FaLinkedin className="icons" />
+            </div>
+            <div className="nav-icon-name">LinkedIn</div>
+          </div>
         </div>
       </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
+      <div className="cards">
+        <div className="close">
+          <IoMdClose />
+        </div>
+        <div className="card c1">Ultiverse</div>
+        <div className="card c2">Racling</div>
+        <div className="card c3">GSAP</div>
+        <div className="card c4">Refine</div>
+        <div className="card c5">WEB3</div>
+        <div className="footer">Click on Close to get rid of the cards</div>
       </div>
     </main>
-  )
+  );
 }
