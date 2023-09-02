@@ -11,8 +11,11 @@ export default function Home() {
       const drawer = document.querySelector(".drawer");
       const close = document.querySelector(".close");
       const cardsContainer = document.querySelector(".cards");
+      const navItems = gsap.utils.toArray(".nav .nav-item");
 
       if (drawer && close && cardsContainer) {
+        gsap.set(".container", { opacity: 1 });
+        gsap.set(".cards", { autoAlpha: 1 });
         const tl = gsap.timeline({
           paused: true,
           reversed: true,
@@ -42,12 +45,14 @@ export default function Home() {
           )
           .from(".footer", { duration: 0.5, opacity: 0 });
 
-        drawer.addEventListener("click", function () {
-          if (tl.reversed()) {
-            tl.play();
-          } else {
-            tl.reverse();
-          }
+        navItems.forEach((navItem) => {
+          navItem.addEventListener("click", function () {
+            if (tl.reversed()) {
+              tl.play();
+            } else {
+              tl.reverse();
+            }
+          });
         });
 
         close.addEventListener("click", function () {
